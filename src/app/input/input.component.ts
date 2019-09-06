@@ -1,20 +1,15 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.css']
 })
-export class InputComponent implements OnInit {
-  @Output() notify = new EventEmitter();
-  constructor() { }
-  inputValue = '';
+export class InputComponent {
+  @Output() notify: EventEmitter<string> = new EventEmitter();
+  constructor() {}
 
-  onInputChange() {
-    this.notify.emit(this.inputValue);
-    return false;
+  public onInputChange(value: string): void {
+    this.notify.emit(value);
   }
-  ngOnInit() {
-  }
-
 }

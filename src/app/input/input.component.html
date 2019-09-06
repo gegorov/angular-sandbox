@@ -1,4 +1,7 @@
-<input type="text" placeholder="enter any value" [(ngModel)]="inputValue" (keyup.enter)="onInputChange()">
-<button (click)="onInputChange()">Search</button>
-
-
+<input
+  type="text"
+  placeholder="enter any value"
+  #searchInput
+  (keyup.enter)="onInputChange(searchInput.value); searchInput.value = ''"
+/>
+<button type="button" (click)="onInputChange(searchInput.value); searchInput.value = ''">Search</button>
