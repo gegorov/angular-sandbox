@@ -6,9 +6,14 @@ import { Component, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./input.component.css']
 })
 export class InputComponent {
-  @Output() notify: EventEmitter<string> = new EventEmitter();
+  /** EventEmmiter to emit value  */
+  @Output() public notify: EventEmitter<string> = new EventEmitter();
   constructor() {}
 
+  /**
+   * Eventhandler to catch value from the input and emit it further to parent
+   * @param {string} value - emitted value
+   */
   public onInputChange(value: string): void {
     this.notify.emit(value);
   }

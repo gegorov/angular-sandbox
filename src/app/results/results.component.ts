@@ -8,5 +8,6 @@ import { Component, Input } from '@angular/core';
 export class ResultsComponent {
   constructor() {}
 
-  @Input() searchResult!: string;
+  /** This is used to recive value from parent component and render in template */
+  @Input() public searchResult!: string;
 }
