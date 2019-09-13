@@ -9,7 +9,7 @@ import { ApiResponse, Movie } from '../models/index';
 @Injectable()
 export class MovieApiService {
   /**
-   * Private proprety for dependency injection
+   * Private property for dependency injection
    */
   private http: HttpClient;
 
@@ -18,7 +18,7 @@ export class MovieApiService {
   }
 
   /**
-   * Fecht function to get data from API
+   * Fetch function to get data from API
    * @param {string} query  - search query
    */
   public fetchMovie(query: string): Observable<Array<Movie>> {

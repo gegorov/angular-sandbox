@@ -2,11 +2,17 @@
   type="text"
   placeholder="enter any value"
   #searchInput
+  (keyup)="changeDisabled($event)"
   (keyup.enter)="onInputChange(searchInput.value); searchInput.value = ''"
 />
-<button class="btn" type="button" (click)="onInputChange(searchInput.value); searchInput.value = ''">
+<button
+  [disabled]="disabled"
+  class="btn"
+  type="button"
+  (click)="onInputChange(searchInput.value); searchInput.value = ''"
+>
   Search
 </button>
-<button class="btn" type="button" (click)="onInputChange(searchInput.value); searchInput.value = ''">
+<button class="btn" type="button" (click)="luckySearch(); searchInput.value = ''">
   I'm feeling lucky
 </button>
