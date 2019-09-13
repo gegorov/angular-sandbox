@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MovieApiService } from './core/services/movie-api.service';
+import { ApiResponse, Movies } from './core/models';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +8,20 @@ import { MovieApiService } from './core/services/movie-api.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  /** used as a storage for value riecived from child input */
+  /** Title of the application */
   public title: string = 'IMDB (almost :)';
+
+  /** used as a storage for value riecived from child input */
   public value: string = '';
+
+  /** used to store fetched results */
+  public movies: Movies[] = [];
+
+  /** used to store error messages */
+  public errors: string[] = [];
+
+  /** variable to trigger loading indicator */
+  public loading: boolean = false;
 
   constructor(private movieApiService: MovieApiService) {}
 
@@ -21,10 +33,21 @@ export class AppComponent {
     this.value = value;
     this.searchMovie(value);
   }
-
-  public searchMovie(searchQuery: string) {
-    this.movieApiService
-      .fetchMovie(searchQuery)
-      .subscribe(data => console.log('DATA: ', data), error => console.log('ERROR: ', error.message));
+  /**
+   * Function that trigers fetch from movieApiService and also handles loading indicator state
+   * @param {string} searchQuery search query
+   */
+  public searchMovie(searchQuery: string): void {
+    this.loading = true;
+    this.movieApiService.fetchMovie(searchQuery).subscribe(
+      (data: ApiResponse) => {
+        this.movies = data.results as Movies[];
+        this.loading = false;
+      },
+      (error: Error) => {
+        this.errors.push(error.message);
+        this.loading = false;
+      }
+    );
   }
 }

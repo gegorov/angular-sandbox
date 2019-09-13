@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { tap, delay, catchError } from 'rxjs/operators';
 
 import C from '../constants';
-
-export interface ApiResponse {
-  page?: number;
-  results?: [];
-  total_results?: number;
-  total_pages?: number;
-}
+import { ApiResponse } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +12,23 @@ export interface ApiResponse {
 export class MovieApiService {
   constructor(private http: HttpClient) {}
 
+  /**
+   * Fecht function to get data from API
+   * @param {string} query  - search query
+   */
   public fetchMovie(query: string): Observable<ApiResponse> {
     console.log('Query: ', query);
-    return this.http.get<ApiResponse>(C.SEARCH_URL).pipe(
-      map(response => {
-        console.log('Response : ', response);
-        return response.results;
+    return this.http
+      .get<ApiResponse>(C.SEARCH_URL, {
+        params: new HttpParams().append('api_key', C.API_KEY).append('query', query)
       })
-    );
+      .pipe(
+        tap((response: ApiResponse) => console.log('response: ', response)),
+        delay(500),
+        catchError((error: Error) => {
+          console.log('Error: ', error.message);
+          return throwError(error);
+        })
+      );
   }
 }
