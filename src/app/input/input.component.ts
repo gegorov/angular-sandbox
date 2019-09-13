@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { Utils } from '../core/utils/index';
 
 @Component({
   selector: 'app-input',
@@ -15,5 +16,9 @@ export class InputComponent {
    */
   public onInputChange(value: string): void {
     this.notify.emit(value);
+  }
+
+  public luckySearch(): void {
+    this.notify.emit(Utils.randomChar());
   }
 }
