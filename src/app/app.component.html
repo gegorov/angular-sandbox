@@ -11,7 +11,7 @@
 
   <ng-template #results>
     <div *ngIf="!loading; else loadingBlock">
-      <app-results [searchResult]="movies"></app-results>
+      <app-results [searchResult$]="movies$"></app-results>
     </div>
     <ng-template #loadingBlock>
       <div class="spinner-wrapper">

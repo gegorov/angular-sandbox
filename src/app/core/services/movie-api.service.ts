@@ -1,33 +1,34 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { tap, delay, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import C from '../constants';
-import { ApiResponse } from '../models';
+import { ApiResponse, Movie } from '../models/index';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class MovieApiService {
-  constructor(private http: HttpClient) {}
+  /**
+   * Private proprety for dependency injection
+   */
+  private http: HttpClient;
+
+  constructor(http: HttpClient) {
+    this.http = http;
+  }
 
   /**
    * Fecht function to get data from API
    * @param {string} query  - search query
    */
-  public fetchMovie(query: string): Observable<ApiResponse> {
-    console.log('Query: ', query);
+  public fetchMovie(query: string): Observable<Array<Movie>> {
     return this.http
       .get<ApiResponse>(C.SEARCH_URL, {
         params: new HttpParams().append('api_key', C.API_KEY).append('query', query)
       })
       .pipe(
-        tap((response: ApiResponse) => console.log('response: ', response)),
-        delay(500),
-        catchError((error: Error) => {
-          console.log('Error: ', error.message);
-          return throwError(error);
+        map((response: ApiResponse) => {
+          return response.results;
         })
       );
   }
