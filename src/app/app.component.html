@@ -1,2 +1,35 @@
-<app-input (notify)="onNotify($event)"></app-input>
-<app-results [searchResult]="value"></app-results>
+<div class="container">
+  <h1>{{ title }}</h1>
+  <app-input (notify)="onNotify($event)"></app-input>
+  <hr />
+
+  <div *ngIf="errors.length; else results">
+    <p class="error" *ngFor="let error of errors">
+      {{ error }}
+    </p>
+  </div>
+
+  <ng-template #results>
+    <div *ngIf="!loading; else loadingBlock">
+      <app-results [searchResult$]="movies$"></app-results>
+    </div>
+    <ng-template #loadingBlock>
+      <div class="spinner-wrapper">
+        <div class="lds-spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

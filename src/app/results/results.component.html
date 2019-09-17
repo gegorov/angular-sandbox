@@ -1,3 +1,6 @@
-<div>
-  <p>Results: {{ searchResult }}</p>
+<div class="card" *ngFor="let movie of searchResult$ | async">
+  <p>
+    <strong> {{ movie.title | titlecase }} </strong>
+    <span> Year: {{ movie.release_date | date: 'yyyy' }}, User rating: {{ movie.popularity }} </span>
+  </p>
 </div>
