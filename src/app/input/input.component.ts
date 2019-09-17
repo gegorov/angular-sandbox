@@ -22,6 +22,7 @@ export class InputComponent {
   public luckySearch(): void {
     this.notify.emit(Utils.randomChar());
   }
+
   public changeDisabled($event: KeyboardEvent): void {
     if (($event.target as HTMLInputElement).value === '') {
       this.disabled = true;
