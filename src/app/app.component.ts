@@ -42,17 +42,12 @@ export class AppComponent {
     this.searchMovie(value);
   }
   /**
-   * Function that trigers fetch from movieApiService and also handles loading indicator state
+   * Function that triggers fetch from movieApiService and also handles loading indicator state
    * @param {string} searchQuery search query
    */
   public searchMovie(searchQuery: string): void {
-    this.errors = [];
-    if (searchQuery) {
-      this.loading = true;
-      this.movies$ = this.movieApiService.fetchMovie(searchQuery);
-      this.loading = false;
-    } else {
-      this.errors.push('Search Query should not be empty');
-    }
+    this.loading = true;
+    this.movies$ = this.movieApiService.fetchMovie(searchQuery);
+    this.loading = false;
   }
 }

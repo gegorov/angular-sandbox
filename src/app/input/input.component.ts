@@ -8,11 +8,19 @@ import { Utils } from '../core/utils/index';
   styleUrls: ['./input.component.scss']
 })
 export class InputComponent implements OnInit {
-  /** Emit search query string on user submit  */
+  /**
+   * Emit search query string on user submit
+   */
   @Output() public notify: EventEmitter<string> = new EventEmitter();
-  public disabled: boolean = true;
+
+  /**
+   * Variable to store form
+   */
   public form: FormGroup;
 
+  /**
+   * method to initialize reactive form
+   */
   ngOnInit(): void {
     this.form = new FormGroup({
       searchInput: new FormControl('', [Validators.required])
@@ -20,32 +28,30 @@ export class InputComponent implements OnInit {
   }
 
   /**
-   * EventHandler to catch value from the input and emit it further to parent
-   * @param {string} value - emitted value
+   * Function that makes random search
    */
-  public onClick(value: string, $event: MouseEvent | KeyboardEvent): void {
-    console.log('EVENT: ', $event);
-    $event.preventDefault();
-    this.notify.emit(value);
+  public luckySearch(): void {
+    this.makeSearch(Utils.randomChar());
   }
 
-  public luckySearch($event: MouseEvent): void {
-    console.log('EVENT2: ', $event);
-    $event.preventDefault();
-    this.notify.emit(Utils.randomChar());
-  }
-
-  public submit(): void {
+  /**
+   * OnSubmit handler for form
+   */
+  public onSubmit(): void {
     if (this.form.valid) {
-      // const formData = { ...this.form.value };
-      console.log('form: ', this.form);
       const searchInput: AbstractControl = this.form.get('searchInput') as AbstractControl;
 
-      this.notify.emit(searchInput.value);
-
-      this.form.reset();
-      // this.form.markAsPristine();
-      this.form.updateValueAndValidity();
+      this.makeSearch(searchInput.value);
     }
+  }
+
+  /**
+   * Function that emits search value and resets the form
+   * @param value search string
+   */
+  private makeSearch(value: string): void {
+    this.notify.emit(value);
+
+    this.form.reset();
   }
 }

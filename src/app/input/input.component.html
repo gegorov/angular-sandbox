@@ -1,15 +1,21 @@
-<form class="search-form" [formGroup]="form" (ngSubmit)="submit()">
+<form class="search-form" [formGroup]="form" (ngSubmit)="onSubmit()">
   <mat-form-field class="search-form--input">
-    <input matInput placeholder="Enter movie name" formControlName="searchInput" />
-    <mat-error *ngIf="form.get('searchInput').hasError('required')">
+    <input
+      matInput
+      placeholder="Enter movie name"
+      formControlName="searchInput"
+      (keydown.enter)="$event.target.blur(); onSubmit(); (false)"
+    />
+    <mat-error *ngIf="form.get('searchInput')!.hasError('required')">
       This field can't be empty
     </mat-error>
   </mat-form-field>
-
-  <button [disabled]="form.invalid" mat-raised-button color="primary">
-    Search
-  </button>
-  <button mat-raised-button color="basic" (click)="luckySearch($event)">
-    I'm feeling lucky
-  </button>
+  <div class="search-form--button-wrapper">
+    <button [disabled]="form.invalid" mat-raised-button color="primary" type="button" (click)="onSubmit()">
+      Search
+    </button>
+    <button mat-raised-button color="basic" (click)="luckySearch($event)" type="button">
+      I'm feeling lucky
+    </button>
+  </div>
 </form>
