@@ -1,18 +1,15 @@
-<input
-  type="text"
-  placeholder="enter any value"
-  #searchInput
-  (keyup)="changeDisabled($event)"
-  (keyup.enter)="onInputChange(searchInput.value); searchInput.value = ''"
-/>
-<button
-  [disabled]="disabled"
-  class="btn"
-  type="button"
-  (click)="onInputChange(searchInput.value); searchInput.value = ''"
->
-  Search
-</button>
-<button class="btn" type="button" (click)="luckySearch(); searchInput.value = ''">
-  I'm feeling lucky
-</button>
+<form class="search-form" [formGroup]="form" (ngSubmit)="submit()">
+  <mat-form-field class="search-form--input">
+    <input matInput placeholder="Enter movie name" formControlName="searchInput" />
+    <mat-error *ngIf="form.get('searchInput').hasError('required')">
+      This field can't be empty
+    </mat-error>
+  </mat-form-field>
+
+  <button [disabled]="form.invalid" mat-raised-button color="primary">
+    Search
+  </button>
+  <button mat-raised-button color="basic" (click)="luckySearch($event)">
+    I'm feeling lucky
+  </button>
+</form>

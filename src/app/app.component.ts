@@ -12,7 +12,7 @@ export class AppComponent {
   /** Title of the application */
   public title: string = 'IMDB (almost :)';
 
-  /** used as a storage for value riecived from child input */
+  /** used as a storage for value received from child input */
   public value: string = '';
 
   /** used to store fetched results */
@@ -25,7 +25,7 @@ export class AppComponent {
   public loading: boolean = false;
 
   /**
-   * Private proprety for dependency injection
+   * Private property for dependency injection
    */
   private movieApiService: MovieApiService;
 
@@ -34,7 +34,7 @@ export class AppComponent {
   }
 
   /**
-   * Listener for data emited from child input to set emitted value to lacal variable
+   * Listener for data emitted from child input to set emitted value to local variable
    * @param {string} value - data from input
    */
   public onNotify(value: string): void {

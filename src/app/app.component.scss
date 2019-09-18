@@ -90,3 +90,15 @@ p {
     opacity: 0;
   }
 }
+.sidenav--container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.sidenav--container .mat-sidenav {
+  padding-left: 20px;
+  min-width: 200px;
+}
