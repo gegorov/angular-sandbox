@@ -1,4 +1,5 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Utils } from '../core/utils/index';
 
 @Component({
@@ -6,28 +7,51 @@ import { Utils } from '../core/utils/index';
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss']
 })
-export class InputComponent {
-  /** Emit search query string on user submit  */
+export class InputComponent implements OnInit {
+  /**
+   * Emit search query string on user submit
+   */
   @Output() public notify: EventEmitter<string> = new EventEmitter();
-  public disabled: boolean = true;
 
   /**
-   * EventHandler to catch value from the input and emit it further to parent
-   * @param {string} value - emitted value
+   * Variable to store form
    */
-  public onInputChange(value: string): void {
-    this.notify.emit(value);
+  public form: FormGroup;
+
+  /**
+   * method to initialize reactive form
+   */
+  ngOnInit(): void {
+    this.form = new FormGroup({
+      searchInput: new FormControl('', [Validators.required])
+    });
   }
 
+  /**
+   * Function that makes random search
+   */
   public luckySearch(): void {
-    this.notify.emit(Utils.randomChar());
+    this.makeSearch(Utils.randomChar());
   }
 
-  public changeDisabled($event: KeyboardEvent): void {
-    if (($event.target as HTMLInputElement).value === '') {
-      this.disabled = true;
-    } else {
-      this.disabled = false;
+  /**
+   * OnSubmit handler for form
+   */
+  public onSubmit(): void {
+    if (this.form.valid) {
+      const searchInput: AbstractControl = this.form.get('searchInput') as AbstractControl;
+
+      this.makeSearch(searchInput.value);
     }
+  }
+
+  /**
+   * Function that emits search value and resets the form
+   * @param value search string
+   */
+  private makeSearch(value: string): void {
+    this.notify.emit(value);
+
+    this.form.reset();
   }
 }

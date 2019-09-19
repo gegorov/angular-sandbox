@@ -9,6 +9,6 @@ import { Movie } from '../core/models';
 export class ResultsComponent {
   constructor() {}
 
-  /** This is used to recive value from parent component and render in template */
+  /** This is used to receive value from parent component and render in template */
   @Input() public searchResult$!: Array<Movie>;
 }

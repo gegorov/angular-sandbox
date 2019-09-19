@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 * {
   box-sizing: border-box;
@@ -18,6 +18,9 @@ body {
   max-width: 1000px;
   margin: 0 auto;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 a {
@@ -109,4 +112,13 @@ textarea {
 
 hr {
   margin: 0.5rem 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }

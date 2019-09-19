@@ -1,35 +1,33 @@
-<div class="container">
-  <h1>{{ title }}</h1>
-  <app-input (notify)="onNotify($event)"></app-input>
-  <hr />
+<mat-sidenav-container class="sidenav--container" autosize>
+  <mat-sidenav #drawer class="sidenav">Future menu will be placed here</mat-sidenav>
+  <mat-sidenav-content>
+    <button mat-icon-button (click)="drawer.toggle()" class="sidenav--drawer">
+      <mat-icon>menu</mat-icon>
+    </button>
 
-  <div *ngIf="errors.length; else results">
-    <p class="error" *ngFor="let error of errors">
-      {{ error }}
-    </p>
-  </div>
+    <div class="container">
+      <h1>{{ title }}</h1>
+      <app-input (notify)="onNotify($event)"></app-input>
+      <hr />
 
-  <ng-template #results>
-    <div *ngIf="!loading; else loadingBlock">
-      <app-results [searchResult$]="movies$"></app-results>
-    </div>
-    <ng-template #loadingBlock>
-      <div class="spinner-wrapper">
-        <div class="lds-spinner">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+      <div *ngIf="errors.length; else results">
+        <p class="error" *ngFor="let error of errors">
+          {{ error }}
+        </p>
       </div>
-    </ng-template>
-  </ng-template>
-</div>
+
+      <ng-template #results>
+        <div *ngIf="!loading; else loadingBlock">
+          <app-results [searchResult$]="movies$"></app-results>
+        </div>
+        <ng-template #loadingBlock>
+          <div class="spinner-wrapper">
+            <div class="lds-spinner" *ngFor="let item of ''.repeat(12).split('')">
+              <div></div>
+            </div>
+          </div>
+        </ng-template>
+      </ng-template>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
