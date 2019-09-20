@@ -11,9 +11,10 @@ import { AppComponent } from './app.component';
 import { InputComponent } from './input/input.component';
 import { ResultsComponent } from './results/results.component';
 import { MovieCardComponent } from './movie-card/movie-card.component';
+import { SearchPageComponent } from './search-page/search-page.component';
 
 @NgModule({
-  declarations: [AppComponent, InputComponent, ResultsComponent, MovieCardComponent],
+  declarations: [AppComponent, InputComponent, ResultsComponent, MovieCardComponent, SearchPageComponent],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
