@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { Utils } from '../core/utils/index';
+import { generateRandomChar } from '../core/utils/index';
 
 @Component({
   selector: 'app-input',
@@ -31,7 +31,7 @@ export class InputComponent implements OnInit {
    * Function that makes random search
    */
   public luckySearch(): void {
-    this.makeSearch(Utils.randomChar());
+    this.makeSearch(generateRandomChar());
   }
 
   /**

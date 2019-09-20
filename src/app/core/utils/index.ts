@@ -1,16 +1,10 @@
 import { ResponseMovie, Movie } from '../models';
 
-export class Utils {
-  static randomChar(): string {
-    const dictionary: string = 'abcdefghijklmnopqrstuvwxyz';
-    const index: number = Math.floor(Math.random() * (dictionary.length + 1));
-    return dictionary[index];
-  }
-
-  static transformResponseFields(movie: ResponseMovie): void {
-    console.log(movie);
-  }
-}
+export const generateRandomChar: () => string = (): string => {
+  const dictionary: string = 'abcdefghijklmnopqrstuvwxyz';
+  const index: number = Math.floor(Math.random() * (dictionary.length + 1));
+  return dictionary[index];
+};
 
 export const transformMovieData: (response: ResponseMovie) => Movie = ({
   poster_path: posterPath,
