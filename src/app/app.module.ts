@@ -10,9 +10,10 @@ import { MaterialModule } from './material/material.module';
 import { AppComponent } from './app.component';
 import { InputComponent } from './input/input.component';
 import { ResultsComponent } from './results/results.component';
+import { MovieCardComponent } from './movie-card/movie-card.component';
 
 @NgModule({
-  declarations: [AppComponent, InputComponent, ResultsComponent],
+  declarations: [AppComponent, InputComponent, ResultsComponent, MovieCardComponent],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,

@@ -1,0 +1,20 @@
+.example-card {
+  max-width: 342px;
+  min-width: 300px;
+  border: dotted 1px green;
+  margin: 10px 5px;
+}
+
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+
+.movie-overview {
+  width: 300px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

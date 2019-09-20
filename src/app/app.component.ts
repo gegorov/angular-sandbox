@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MovieApiService } from './core/index';
-import { ResponseMovie } from './core/models';
+import { Movie } from './core/models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -16,7 +16,7 @@ export class AppComponent {
   public value: string = '';
 
   /** used to store fetched results */
-  public movies$!: Observable<Array<ResponseMovie>>;
+  public movies$!: Observable<Array<Movie>>;
 
   /** used to store error messages */
   public errors: Array<string> = [];

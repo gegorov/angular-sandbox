@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { ResponseMovie } from '../core/models';
+import { Movie } from '../core/models';
 
 @Component({
   selector: 'app-movie-card',
@@ -8,6 +8,7 @@ import { ResponseMovie } from '../core/models';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MovieCardComponent {
-  @Input() movie: ResponseMovie;
+  @Input() movie: Movie;
+
   constructor() {}
 }
