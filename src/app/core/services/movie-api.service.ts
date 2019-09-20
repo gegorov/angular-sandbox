@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import C from '../constants';
-import { ApiResponse, Movie } from '../models/index';
+import { ApiResponse, ResponseMovie } from '../models/index';
 
 @Injectable()
 export class MovieApiService {
@@ -21,7 +21,7 @@ export class MovieApiService {
    * Fetch function to get data from API
    * @param {string} query  - search query
    */
-  public fetchMovie(query: string): Observable<Array<Movie>> {
+  public fetchMovie(query: string): Observable<Array<ResponseMovie>> {
     return this.http
       .get<ApiResponse>(C.SEARCH_URL, {
         params: new HttpParams().append('api_key', C.API_KEY).append('query', query)

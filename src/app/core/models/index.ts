@@ -1,4 +1,4 @@
-import { Movie } from './movie.interface';
+import { ResponseMovie } from './response-movie.interface';
 import { ApiResponse } from './api-response.interface';
 
-export { Movie, ApiResponse };
+export { ResponseMovie, ApiResponse };

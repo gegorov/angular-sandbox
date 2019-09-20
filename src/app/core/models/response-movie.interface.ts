@@ -1,4 +1,4 @@
-export interface Movie {
+export interface ResponseMovie {
   poster_path: string | null;
   adult: boolean;
   overview: string;

@@ -1,8 +1,8 @@
-import { Movie } from './movie.interface';
+import { ResponseMovie } from './response-movie.interface';
 
 export interface ApiResponse {
   page?: number;
-  results: Array<Movie>;
+  results: Array<ResponseMovie>;
   total_results?: number;
   total_pages?: number;
 }
