@@ -1,11 +1,18 @@
 import { ResponseMovie, Movie } from '../models';
 
+/**
+ * function that generates random alpha char to be used as a query parameter in lucy search
+ */
 export const generateRandomChar: () => string = (): string => {
   const dictionary: string = 'abcdefghijklmnopqrstuvwxyz';
   const index: number = Math.floor(Math.random() * (dictionary.length + 1));
   return dictionary[index];
 };
 
+/**
+ * Mapper function that is used to transform objects from api responce that have
+ * snake_case propreties to camelCase propreties
+ */
 export const transformMovieData: (response: ResponseMovie) => Movie = ({
   poster_path: posterPath,
   release_date: releaseDate,

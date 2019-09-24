@@ -9,25 +9,35 @@ import { Observable } from 'rxjs';
   styleUrls: ['./search-page.component.scss']
 })
 export class SearchPageComponent {
-  /** Title of the application */
-  public title: string = 'IMDB (almost :)';
-
-  /** used as a storage for value received from child input */
-  public value: string = '';
-
-  /** used to store fetched results */
-  public movies$!: Observable<Array<Movie>>;
-
-  /** used to store error messages */
-  public errors: Array<string> = [];
-
-  /** variable to trigger loading indicator */
-  public loading: boolean = false;
-
   /**
    * Private property for dependency injection
    */
   private movieApiService: MovieApiService;
+
+  /**
+   * Title of the application
+   */
+  public title: string = 'IMDB (almost :)';
+
+  /**
+   * used as a storage for value received from child input
+   */
+  public value: string = '';
+
+  /**
+   *  used to store fetched results
+   */
+  public movies$!: Observable<Array<Movie>>;
+
+  /**
+   * used to store error messages
+   */
+  public errors: Array<string> = [];
+
+  /**
+   *  variable to trigger loading indicator
+   */
+  public loading: boolean = false;
 
   constructor(movieApiService: MovieApiService) {
     this.movieApiService = movieApiService;

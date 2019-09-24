@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of, forkJoin } from 'rxjs';
-import { map, tap, mergeMap, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import C from '../constants';
 import { transformMovieData } from '../utils/index';
-import { ApiResponse, ResponseMovie, Movie, MoviePersonnel } from '../models/index';
+import { ApiResponse, ResponseMovie, Movie } from '../models/index';
 
 @Injectable()
 export class MovieApiService {
@@ -49,11 +49,11 @@ export class MovieApiService {
       );
   }
 
-  private getMovieCast(id: number): Observable<MoviePersonnel> {
-    return this.http
-      .get<MoviePersonnel>(`${C.SEARCH_URL}/${id}/credits`, {
-        params: new HttpParams().append('api_key', C.API_KEY)
-      })
-      .pipe(tap((data: MoviePersonnel) => console.log('Cast: ', data)));
-  }
+  // private getMovieCast(id: number): Observable<MoviePersonnel> {
+  //   return this.http
+  //     .get<MoviePersonnel>(`${C.SEARCH_URL}/${id}/credits`, {
+  //       params: new HttpParams().append('api_key', C.API_KEY)
+  //     })
+  //     .pipe(tap((data: MoviePersonnel) => console.log('Cast: ', data)));
+  // }
 }
