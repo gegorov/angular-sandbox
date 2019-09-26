@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MovieApiService } from '../core/index';
-import { Movie } from '../core/models';
+import { MovieWithCast } from '../core/models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -27,7 +27,7 @@ export class SearchPageComponent {
   /**
    *  used to store fetched results
    */
-  public movies$!: Observable<Array<Movie>>;
+  public movies$!: Observable<Array<MovieWithCast>>;
 
   /**
    * used to store error messages

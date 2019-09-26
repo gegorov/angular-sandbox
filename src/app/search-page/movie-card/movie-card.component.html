@@ -10,5 +10,9 @@
     <p class="movie-overview">
       {{ movie.overview }}
     </p>
+    <div *ngFor="let actor of movie.cast">
+      <span> {{ actor.name }} as {{ actor.character }} </span>
+      <img src="{{ actor.profilePath }}" alt="{{ actor.name }}" width="45" />
+    </div>
   </mat-card-content>
 </mat-card>

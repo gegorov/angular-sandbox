@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Movie } from '../../core/models';
+import { MovieWithCast } from '../../core/models';
 
 @Component({
   selector: 'app-results',
@@ -12,5 +12,5 @@ export class ResultsComponent {
   /**
    * This is used to receive value from parent component and render in template
    */
-  @Input() public searchResult$!: Array<Movie>;
+  @Input() public searchResult$!: Array<MovieWithCast>;
 }

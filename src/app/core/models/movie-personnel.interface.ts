@@ -1,4 +1,15 @@
 export interface Cast {
+  castId: number;
+  character: string;
+  creditId: string;
+  gender: number | null;
+  id: number;
+  name: string;
+  order: number;
+  profilePath: string | null;
+}
+
+export interface RawCast {
   cast_id: number;
   character: string;
   credit_id: string;
@@ -21,6 +32,6 @@ export interface Crew {
 
 export interface MoviePersonnel {
   id: number;
-  cast: Array<Cast>;
+  cast: Array<RawCast>;
   crew: Array<Crew>;
 }

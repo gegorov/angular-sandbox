@@ -1,4 +1,4 @@
-import { ResponseMovie, Movie } from '../models';
+import { ResponseMovie, Movie, Cast, RawCast } from '../models';
 
 /**
  * function that generates random alpha char to be used as a query parameter in lucy search
@@ -32,5 +32,17 @@ export const transformMovieData: (response: ResponseMovie) => Movie = ({
   backdropPath,
   voteCount,
   voteAverage,
+  ...rest
+});
+
+export const transformCastData: (response: RawCast) => Cast = ({
+  cast_id: castId,
+  credit_id: creditId,
+  profile_path: profilePath,
+  ...rest
+}: RawCast): Cast => ({
+  castId,
+  creditId,
+  profilePath,
   ...rest
 });
