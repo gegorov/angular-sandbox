@@ -1,7 +1,8 @@
+// tslint:disable
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, zip } from 'rxjs';
-import { map, switchMap, tap, pluck } from 'rxjs/operators';
+import { Observable, of, from, zip } from 'rxjs';
+import { map, switchMap, tap, pluck, mergeMap, scan, catchError } from 'rxjs/operators';
 
 import C from '../constants';
 import { transformMovieData } from '../utils/index';
@@ -33,12 +34,34 @@ export class MovieApiService {
         }),
         map((results: Array<ResponseMovie>) => results.map(transformMovieData)),
         map(this.processMoviePosterFileds),
-        map((data: Array<Movie>) =>
-          data.map((movie: Movie) => ({
-            ...movie,
-            cast: this.getMovieCast(movie.id).subscribe()
-          }))
-        ),
+        switchMap((data: Array<Movie>) => {
+          if (data.length) {
+            // option 1
+            const movieStreams: Array<Observable<Movie>> = data.map((movie: Movie) =>
+              this.getMovieCast(movie.id).pipe(map((cast: Cast) => ({ ...movie, cast }), catchError(err => of(movie))))
+            );
+
+            return zip(...movieStreams);
+
+            // option 2
+
+            // return from(data).pipe(
+            //   mergeMap((movie: Movie) =>
+            //     this.getMovieCast(movie.id).pipe(map((cast: Array<Cast>) => ({ ...movie, cast })))
+            //   ),
+            //   scan(
+            //     (acc: Array<Movie>, movieWithCast: Movie) => {
+            //       console.log('acc', acc);
+            //       console.log('movie', movieWithCast);
+            //       return [...acc, movieWithCast];
+            //     },
+            //     [] as Array<Movie>
+            //   )
+            // );
+          } else {
+            return of([]);
+          }
+        }),
         tap(data => console.log('Data: ', data))
         // switchMap(({ id } => {}))
       );
@@ -51,10 +74,10 @@ export class MovieApiService {
     return movies$;
   }
 
-  private processCast = id => {
-    const casts = this.getMovieCast(id);
-    return zip(casts);
-  };
+  // private processCast = id => {
+  //   const casts = this.getMovieCast(id);
+  //   return zip(casts);
+  // };
 
   private processMoviePosterFileds: (results: Array<Movie>) => Array<Movie> = (results: Array<Movie>) =>
     results.map((movie: Movie) => {
