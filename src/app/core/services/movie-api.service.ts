@@ -69,31 +69,33 @@ export class MovieApiService {
   //     };
   //   });
 
-  private fieldMapper = (array: Array<Movie> | Array<Cast>, fieldName: string) => {
-    const placeholders = {
+  private fieldMapper<T>(array: Array<T>, fieldName: keyof T): Array<T> {
+    const placeholders: any = {
       profilePath: 'https://via.placeholder.com/45/45',
       posterPath: 'https://via.placeholder.com/342/512'
     };
 
-    const imageUrls = {
+    const imageUrls: any = {
       profilePath: C.IMAGE_URL_W45,
       posterPath: C.IMAGE_URL_W185
     };
 
-    return array.map((obj: Movie | Cast) => {
-      if (!obj[fieldName]) {
-        return {
-          ...obj,
-          fieldName: placeholders[fieldName]
-        };
+    return array.map(
+      (obj: T): T => {
+        if (!obj[fieldName]) {
+          return {
+            ...obj,
+            [fieldName]: placeholders[fieldName]
+          };
+        } else {
+          return {
+            ...obj,
+            [fieldName]: `${imageUrls[fieldName]}${obj[fieldName]}`
+          };
+        }
       }
-
-      const result = { ...obj };
-      result[fieldName] = `${imageUrls[fieldName]}${obj[fieldName]}`;
-
-      return result;
-    });
-  };
+    );
+  }
 
   private getMovieCast(id: number): Observable<Array<Cast>> {
     return this.http
