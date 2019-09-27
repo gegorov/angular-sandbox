@@ -41,34 +41,11 @@ export class MovieApiService {
     return movies$;
   }
 
-  // private processMoviePosterFileds: (results: Array<Movie>) => Array<Movie> = (results: Array<Movie>) =>
-  //   results.map((movie: Movie) => {
-  //     if (!movie.posterPath) {
-  //       return {
-  //         ...movie,
-  //         posterPath: 'https://via.placeholder.com/342/512'
-  //       };
-  //     }
-  //     return {
-  //       ...movie,
-  //       posterPath: `${C.IMAGE_URL_W185}${movie.posterPath}`
-  //     };
-  //   });
-
-  // private processCastProfileFileds: (results: Array<Cast>) => Array<Cast> = (results: Array<Cast>) =>
-  //   results.map((cast: Cast) => {
-  //     if (!cast.profilePath) {
-  //       return {
-  //         ...cast,
-  //         profilePath: 'https://via.placeholder.com/45/45'
-  //       };
-  //     }
-  //     return {
-  //       ...cast,
-  //       profilePath: `${C.IMAGE_URL_W45}${cast.profilePath}`
-  //     };
-  //   });
-
+  /**
+   * Function that creates full image url and assign it to the passed array of objects
+   * @param {Array<Movie | Cast>} array
+   * @param {string} fieldName
+   */
   private fieldMapper<T>(array: Array<T>, fieldName: keyof T): Array<T> {
     const placeholders: any = {
       profilePath: 'https://via.placeholder.com/45/45',
@@ -97,6 +74,10 @@ export class MovieApiService {
     );
   }
 
+  /**
+   * Funciton that fetches cast for given movie id
+   * @param {number} id
+   */
   private getMovieCast(id: number): Observable<Array<Cast>> {
     return this.http
       .get<MoviePersonnel>(`${C.SEARCH_URL}/movie/${id}/credits`, {
@@ -109,6 +90,10 @@ export class MovieApiService {
       );
   }
 
+  /**
+   * Funciton that return a stream with array of observables that consist of movies cast
+   * @param {number} id
+   */
   private fetchMovieCast: (data: Array<Movie>) => Observable<Array<MovieWithCast>> = (data: Array<Movie>) => {
     if (data.length) {
       // option 1
