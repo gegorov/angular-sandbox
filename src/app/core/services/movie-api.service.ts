@@ -33,7 +33,7 @@ export class MovieApiService {
           return response.results;
         }),
         map((results: Array<ResponseMovie>) => results.map(transformMovieData)),
-        map(this.processMoviePosterFileds),
+        map(data => this.fieldMapper(data, 'posterPath')),
         switchMap(this.fetchMovieCast),
         tap(data => console.log('Data: ', data))
       );
@@ -41,33 +41,59 @@ export class MovieApiService {
     return movies$;
   }
 
-  private processMoviePosterFileds: (results: Array<Movie>) => Array<Movie> = (results: Array<Movie>) =>
-    results.map((movie: Movie) => {
-      if (!movie.posterPath) {
-        return {
-          ...movie,
-          posterPath: 'https://via.placeholder.com/342/512'
-        };
-      }
-      return {
-        ...movie,
-        posterPath: `${C.IMAGE_URL_W185}${movie.posterPath}`
-      };
-    });
+  // private processMoviePosterFileds: (results: Array<Movie>) => Array<Movie> = (results: Array<Movie>) =>
+  //   results.map((movie: Movie) => {
+  //     if (!movie.posterPath) {
+  //       return {
+  //         ...movie,
+  //         posterPath: 'https://via.placeholder.com/342/512'
+  //       };
+  //     }
+  //     return {
+  //       ...movie,
+  //       posterPath: `${C.IMAGE_URL_W185}${movie.posterPath}`
+  //     };
+  //   });
 
-  private processCastProfileFileds: (results: Array<Cast>) => Array<Cast> = (results: Array<Cast>) =>
-    results.map((cast: Cast) => {
-      if (!cast.profilePath) {
+  // private processCastProfileFileds: (results: Array<Cast>) => Array<Cast> = (results: Array<Cast>) =>
+  //   results.map((cast: Cast) => {
+  //     if (!cast.profilePath) {
+  //       return {
+  //         ...cast,
+  //         profilePath: 'https://via.placeholder.com/45/45'
+  //       };
+  //     }
+  //     return {
+  //       ...cast,
+  //       profilePath: `${C.IMAGE_URL_W45}${cast.profilePath}`
+  //     };
+  //   });
+
+  private fieldMapper = (array: Array<Movie> | Array<Cast>, fieldName: string) => {
+    const placeholders = {
+      profilePath: 'https://via.placeholder.com/45/45',
+      posterPath: 'https://via.placeholder.com/342/512'
+    };
+
+    const imageUrls = {
+      profilePath: C.IMAGE_URL_W45,
+      posterPath: C.IMAGE_URL_W185
+    };
+
+    return array.map((obj: Movie | Cast) => {
+      if (!obj[fieldName]) {
         return {
-          ...cast,
-          profilePath: 'https://via.placeholder.com/45/45'
+          ...obj,
+          fieldName: placeholders[fieldName]
         };
       }
-      return {
-        ...cast,
-        profilePath: `${C.IMAGE_URL_W45}${cast.profilePath}`
-      };
+
+      const result = { ...obj };
+      result[fieldName] = `${imageUrls[fieldName]}${obj[fieldName]}`;
+
+      return result;
     });
+  };
 
   private getMovieCast(id: number): Observable<Array<Cast>> {
     return this.http
@@ -77,7 +103,7 @@ export class MovieApiService {
       .pipe(
         pluck('cast'),
         map((cast: Array<RawCast>) => cast.map(transformCastData)),
-        map(this.processCastProfileFileds)
+        map(data => this.fieldMapper(data, 'profilePath'))
       );
   }
 
