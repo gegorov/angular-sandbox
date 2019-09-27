@@ -51,7 +51,7 @@ export class MovieApiService {
       }
       return {
         ...movie,
-        posterPath: `${C.IMAGE_URL_W342}${movie.posterPath}`
+        posterPath: `${C.IMAGE_URL_W185}${movie.posterPath}`
       };
     });
 

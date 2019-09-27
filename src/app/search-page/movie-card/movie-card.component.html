@@ -5,14 +5,28 @@
     </mat-card-title>
     <mat-card-subtitle>Release date: {{ movie.releaseDate }}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image src="{{ movie.posterPath }}" alt="{{ movie.title }}" />
+
   <mat-card-content>
-    <p class="movie-overview">
-      {{ movie.overview }}
-    </p>
-    <div *ngFor="let actor of movie.cast">
-      <span> {{ actor.name }} as {{ actor.character }} </span>
-      <img src="{{ actor.profilePath }}" alt="{{ actor.name }}" width="45" />
+    <div class="movie-poster__wrapper">
+      <img src="{{ movie.posterPath }}" alt="{{ movie.title }}" width="185" class="movie-poster" />
+    </div>
+    <div class="movie-details">
+      <p class="movie-overview">
+        {{ movie.overview }}
+      </p>
+      <div class="movie-cast">
+        <div class="movie-cast__card" *ngFor="let actor of movie.cast.slice(0, 5)">
+          <img src="{{ actor.profilePath }}" alt="{{ actor.name }}" width="45" class="movie-cast__profile" />
+          <div class="movie-cast__actor-name">
+            <span class="movie-cast__actor">
+              <strong>
+                {{ actor.name }}
+              </strong>
+            </span>
+            <span> as {{ actor.character }} </span>
+          </div>
+        </div>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>

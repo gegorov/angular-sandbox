@@ -1,20 +1,62 @@
 .example-card {
-  max-width: 342px;
-  min-width: 300px;
+  width: 800px;
+  height: 500px;
   border: dotted 1px green;
   margin: 10px 5px;
 }
 
-.example-header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  background-size: cover;
-}
-
 .movie-overview {
-  width: 300px;
+  width: 500px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 5;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.movie-poster {
+  width: 185px;
+}
+
+.movie-poster__wrapper {
+  margin: 5px;
+  width: 185px;
+}
+
+mat-card-content {
+  display: flex;
+  flex-direction: row;
+}
+.movie-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-cast {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.movie-cast__card {
+  align-items: center;
+  justify-content: flex-start;
+  width: 260px;
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+.movie-cast__profile {
+  margin-right: 5px;
+}
+
+.movie-cast__actor {
+  font-size: 1.1rem;
+}
+
+.movie-cast__actor-name {
+  margin: 0 5px;
+  display: flex;
+  flex-direction: column;
 }
