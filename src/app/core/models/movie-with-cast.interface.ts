@@ -1,6 +1,9 @@
-export interface Movie {
+import { Cast } from './movie-personnel.interface';
+
+export interface MovieWithCast {
   posterPath: string | null;
   adult: boolean;
+  cast: Array<Cast>;
   overview: string;
   releaseDate: string;
   genreIds: Array<string>;
