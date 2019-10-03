@@ -1,7 +1,7 @@
 // tslint:disable
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of, zip } from 'rxjs';
+import { Observable, of, zip, BehaviorSubject } from 'rxjs';
 import { map, switchMap, tap, pluck, catchError } from 'rxjs/operators';
 
 import C from '../constants';
@@ -14,6 +14,8 @@ export class MovieApiService {
    * Private property for dependency injection
    */
   private http: HttpClient;
+
+  private page$: BehaviorSubject<number> = new BehaviorSubject(1);
 
   constructor(http: HttpClient) {
     this.http = http;
@@ -38,8 +40,15 @@ export class MovieApiService {
         tap(data => console.log('Data: ', data))
       );
 
-    return movies$;
+    return this.page$.pipe(
+      tap(value => console.log('subject value: ', value)),
+      switchMap(() => {
+        return movies$;
+      })
+    );
   }
+
+  public getNextPage(): void {}
 
   /**
    * Function that creates full image url and assign it to the passed array of objects
