@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, zip, BehaviorSubject } from 'rxjs';
-import { map, switchMap, tap, pluck, catchError, filter, scan, debounceTime } from 'rxjs/operators';
+import { map, switchMap, tap, pluck, catchError, filter, scan } from 'rxjs/operators';
 
 import C from '../constants';
 import { transformMovieData, transformCastData } from '../utils/index';
@@ -23,16 +23,13 @@ export class MovieApiService {
   /**
    * varibale to store a behaviorsubject that controls page number
    */
-  private page$: BehaviorSubject<number> = new BehaviorSubject(this.pageInitialValue);
+  private page$: BehaviorSubject<number>;
 
   /**
    * variable to store time of first fetch
    */
-  private fetchTimeMiliseconds: number;
-  /**
-   * variable to store time of fetch of cast
-   */
-  private castTimeMiliseconds: number = 0;
+  private fetchTimeMiliseconds: Date;
+
   /**
    * interval for debouncing
    */
@@ -74,7 +71,7 @@ export class MovieApiService {
       })
       .pipe(
         tap(() => {
-          this.fetchTimeMiliseconds = new Date().getTime();
+          this.fetchTimeMiliseconds = new Date();
         }),
         tap((data: ApiResponse) => {
           if (data.total_pages && data.page && data.total_pages > data.page) {
@@ -90,6 +87,7 @@ export class MovieApiService {
         }),
         map((results: Array<ResponseMovie>) => results.map(transformMovieData)),
         map(data => this.fieldMapper(data, 'posterPath')),
+
         switchMap(this.fetchMovieCast)
       );
   }
@@ -99,15 +97,15 @@ export class MovieApiService {
    */
   public getMoviesStream(): Observable<Array<MovieWithCast>> {
     return this.query$.pipe(
-      tap(() => {
-        this.fetchTimeMiliseconds = new Date().getTime();
-      }),
       filter((query: string) => !!query),
-      debounceTime(this.debounceInterval - (this.fetchTimeMiliseconds - this.castTimeMiliseconds)),
+
       switchMap((query: string) => {
-        return this.page$.pipe(switchMap((pageNumber: number) => this.getData(query, pageNumber)));
-      }),
-      scan((acc, resp) => [...acc, ...resp], [] as Array<MovieWithCast>)
+        this.page$ = new BehaviorSubject(this.pageInitialValue);
+        return this.page$.pipe(
+          switchMap((pageNumber: number) => this.getData(query, pageNumber)),
+          scan((acc, resp) => [...acc, ...resp], [] as Array<MovieWithCast>)
+        );
+      })
     );
   }
 
@@ -116,7 +114,15 @@ export class MovieApiService {
    */
   public getNextPage(): void {
     if (this.totalPages > this.currentPage) {
-      this.page$.next(++this.currentPage);
+      const difference = Date.now() - this.fetchTimeMiliseconds.getTime();
+      console.log('diff: ', difference);
+
+      const delay = difference > this.debounceInterval ? 0 : this.debounceInterval - difference + 1;
+      console.log('delay: ', delay);
+
+      setTimeout(() => {
+        this.page$.next(++this.currentPage);
+      }, delay);
     }
   }
 
@@ -164,9 +170,6 @@ export class MovieApiService {
         params: new HttpParams().append('api_key', C.API_KEY),
       })
       .pipe(
-        tap(() => {
-          this.castTimeMiliseconds = new Date().getTime();
-        }),
         pluck(keyToPluck),
         map((cast: Array<RawCast>) => cast.map(transformCastData)),
         map(data => this.fieldMapper(data, 'profilePath'))
@@ -179,14 +182,10 @@ export class MovieApiService {
    */
   private fetchMovieCast: (data: Array<Movie>) => Observable<Array<MovieWithCast>> = (data: Array<Movie>) => {
     if (data.length) {
-      // option 1
       const movieStreams$: Array<Observable<MovieWithCast>> = data.map((movie: Movie) =>
         this.getMovieCast(movie.id).pipe(
           map((cast: Array<Cast>) => ({ ...movie, cast })),
-          catchError(() => {
-            return of(movie as MovieWithCast);
-          })
-          // tap(data => console.log(data))
+          catchError(() => of(movie as MovieWithCast))
         )
       );
 
