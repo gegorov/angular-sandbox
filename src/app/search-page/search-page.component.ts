@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MovieApiService } from '../core/index';
 import { MovieWithCast } from '../core/models';
 import { Observable } from 'rxjs';
@@ -6,9 +6,9 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-search-page',
   templateUrl: './search-page.component.html',
-  styleUrls: ['./search-page.component.scss']
+  styleUrls: ['./search-page.component.scss'],
 })
-export class SearchPageComponent {
+export class SearchPageComponent implements OnInit {
   /**
    * public property for dependency injection
    */
@@ -43,6 +43,9 @@ export class SearchPageComponent {
     this.movieApiService = movieApiService;
   }
 
+  ngOnInit(): void {
+    this.movies$ = this.movieApiService.getMoviesStream();
+  }
   /**
    * Listener for data emitted from child input to set emitted value to local variable
    * @param {string} value - data from input
@@ -52,6 +55,9 @@ export class SearchPageComponent {
     this.searchMovie(value);
   }
 
+  /**
+   * function to load more data from the server
+   */
   public loadMore(): void {
     this.movieApiService.getNextPage();
   }
@@ -59,9 +65,7 @@ export class SearchPageComponent {
    * Function that triggers fetch from movieApiService and also handles loading indicator state
    * @param {string} searchQuery search query
    */
-  public searchMovie(searchQuery: string): void {
-    this.loading = true;
-    this.movies$ = this.movieApiService.fetchMovie(searchQuery);
-    this.loading = false;
+  private searchMovie(searchQuery: string): void {
+    this.movieApiService.query$.next(searchQuery);
   }
 }

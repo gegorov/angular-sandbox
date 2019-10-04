@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, zip, BehaviorSubject } from 'rxjs';
-import { map, switchMap, tap, pluck, catchError } from 'rxjs/operators';
+import { map, switchMap, tap, pluck, catchError, filter, scan, debounceTime } from 'rxjs/operators';
 
 import C from '../constants';
 import { transformMovieData, transformCastData } from '../utils/index';
@@ -15,27 +15,67 @@ export class MovieApiService {
    */
   private http: HttpClient;
 
+  /**
+   * initial value for $page subject
+   */
   private pageInitialValue = 1;
+
+  /**
+   * varibale to store a behaviorsubject that controls page number
+   */
   private page$: BehaviorSubject<number> = new BehaviorSubject(this.pageInitialValue);
 
+  /**
+   * variable to store time of first fetch
+   */
+  private fetchTimeMiliseconds: number;
+  /**
+   * variable to store time of fetch of cast
+   */
+  private castTimeMiliseconds: number = 0;
+  /**
+   * interval for debouncing
+   */
+  private debounceInterval: number = 10000;
+  /**
+   * current page indicator
+   */
   private currentPage: number = 0;
+  /**
+   * total number of pages, used to determine whether you need to show load more button
+   */
   private totalPages: number = 0;
 
+  /**
+   * Subject that is used to handle search queries
+   */
+  public query$: BehaviorSubject<string> = new BehaviorSubject('');
+  /**
+   * public variable that is used in template of search page as a condition to show Load more button
+   */
   public isNextPage = false;
+
   constructor(http: HttpClient) {
     this.http = http;
   }
 
   /**
-   * Fetch function to get data from API
-   * @param {string} query  - search query
+   * Function that fetches data
+   * @param query - search query
+   * @param page  - page number for server request
    */
-  public fetchMovie(query: string): Observable<Array<MovieWithCast>> {
-    const movies$: Observable<Array<MovieWithCast>> = this.http
+  private getData(query: string, page: number): Observable<Array<MovieWithCast>> {
+    return this.http
       .get<ApiResponse>(`${C.SEARCH_URL}/search/movie`, {
-        params: new HttpParams().append('api_key', C.API_KEY).append('query', query)
+        params: new HttpParams()
+          .append('api_key', C.API_KEY)
+          .append('query', query)
+          .append('page', `${page}`),
       })
       .pipe(
+        tap(() => {
+          this.fetchTimeMiliseconds = new Date().getTime();
+        }),
         tap((data: ApiResponse) => {
           if (data.total_pages && data.page && data.total_pages > data.page) {
             this.isNextPage = true;
@@ -50,21 +90,30 @@ export class MovieApiService {
         }),
         map((results: Array<ResponseMovie>) => results.map(transformMovieData)),
         map(data => this.fieldMapper(data, 'posterPath')),
-        switchMap(this.fetchMovieCast),
-        tap(data => console.log('Data: ', data))
+        switchMap(this.fetchMovieCast)
       );
+  }
 
-    return this.page$.pipe(
-      tap(value => console.log('subject value: ', value)),
+  /**
+   * function that returns a stream
+   */
+  public getMoviesStream(): Observable<Array<MovieWithCast>> {
+    return this.query$.pipe(
       tap(() => {
-        this.isNextPage = false;
+        this.fetchTimeMiliseconds = new Date().getTime();
       }),
-      switchMap(() => {
-        return movies$;
-      })
+      filter((query: string) => !!query),
+      debounceTime(this.debounceInterval - (this.fetchTimeMiliseconds - this.castTimeMiliseconds)),
+      switchMap((query: string) => {
+        return this.page$.pipe(switchMap((pageNumber: number) => this.getData(query, pageNumber)));
+      }),
+      scan((acc, resp) => [...acc, ...resp], [] as Array<MovieWithCast>)
     );
   }
 
+  /**
+   * function to get new page and fire new value to $page subject
+   */
   public getNextPage(): void {
     if (this.totalPages > this.currentPage) {
       this.page$.next(++this.currentPage);
@@ -78,13 +127,13 @@ export class MovieApiService {
    */
   private fieldMapper<T>(array: Array<T>, fieldName: keyof T): Array<T> {
     const placeholders: any = {
-      profilePath: 'https://via.placeholder.com/45/45',
-      posterPath: 'https://via.placeholder.com/342/512'
+      profilePath: C.PLACEHOLDER_PROFILE,
+      posterPath: C.PLACEHOLDER_POSTER,
     };
 
     const imageUrls: any = {
       profilePath: C.IMAGE_URL_W45,
-      posterPath: C.IMAGE_URL_W185
+      posterPath: C.IMAGE_URL_W185,
     };
 
     return array.map(
@@ -92,12 +141,12 @@ export class MovieApiService {
         if (!obj[fieldName]) {
           return {
             ...obj,
-            [fieldName]: placeholders[fieldName]
+            [fieldName]: placeholders[fieldName],
           };
         } else {
           return {
             ...obj,
-            [fieldName]: `${imageUrls[fieldName]}${obj[fieldName]}`
+            [fieldName]: `${imageUrls[fieldName]}${obj[fieldName]}`,
           };
         }
       }
@@ -109,12 +158,16 @@ export class MovieApiService {
    * @param {number} id
    */
   private getMovieCast(id: number): Observable<Array<Cast>> {
+    const keyToPluck = 'cast';
     return this.http
       .get<MoviePersonnel>(`${C.SEARCH_URL}/movie/${id}/credits`, {
-        params: new HttpParams().append('api_key', C.API_KEY)
+        params: new HttpParams().append('api_key', C.API_KEY),
       })
       .pipe(
-        pluck('cast'),
+        tap(() => {
+          this.castTimeMiliseconds = new Date().getTime();
+        }),
+        pluck(keyToPluck),
         map((cast: Array<RawCast>) => cast.map(transformCastData)),
         map(data => this.fieldMapper(data, 'profilePath'))
       );
@@ -130,7 +183,9 @@ export class MovieApiService {
       const movieStreams$: Array<Observable<MovieWithCast>> = data.map((movie: Movie) =>
         this.getMovieCast(movie.id).pipe(
           map((cast: Array<Cast>) => ({ ...movie, cast })),
-          catchError(() => of(movie as MovieWithCast))
+          catchError(() => {
+            return of(movie as MovieWithCast);
+          })
           // tap(data => console.log(data))
         )
       );

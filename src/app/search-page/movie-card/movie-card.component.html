@@ -15,7 +15,7 @@
         {{ movie.overview }}
       </p>
       <div class="movie-cast">
-        <div class="movie-cast__card" *ngFor="let actor of movie.cast.slice(0, 5)">
+        <div class="movie-cast__card" *ngFor="let actor of movie?.cast?.slice(0, 5)">
           <img src="{{ actor.profilePath }}" alt="{{ actor.name }}" width="45" class="movie-cast__profile" />
           <div class="movie-cast__actor-name">
             <span class="movie-cast__actor">

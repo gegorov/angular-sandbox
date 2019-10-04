@@ -4,5 +4,7 @@ export default {
   IMAGE_URL_W500: 'https://image.tmdb.org/t/p/w500',
   IMAGE_URL_W342: 'https://image.tmdb.org/t/p/w342',
   IMAGE_URL_W45: 'https://image.tmdb.org/t/p/w45',
-  IMAGE_URL_W185: 'https://image.tmdb.org/t/p/w185'
+  IMAGE_URL_W185: 'https://image.tmdb.org/t/p/w185',
+  PLACEHOLDER_PROFILE: 'https://via.placeholder.com/45/45',
+  PLACEHOLDER_POSTER: 'https://via.placeholder.com/342/512',
 };
