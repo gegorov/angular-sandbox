@@ -15,8 +15,13 @@ export class MovieApiService {
    */
   private http: HttpClient;
 
-  private page$: BehaviorSubject<number> = new BehaviorSubject(1);
+  private pageInitialValue = 1;
+  private page$: BehaviorSubject<number> = new BehaviorSubject(this.pageInitialValue);
 
+  private currentPage: number = 0;
+  private totalPages: number = 0;
+
+  public isNextPage = false;
   constructor(http: HttpClient) {
     this.http = http;
   }
@@ -31,6 +36,15 @@ export class MovieApiService {
         params: new HttpParams().append('api_key', C.API_KEY).append('query', query)
       })
       .pipe(
+        tap((data: ApiResponse) => {
+          if (data.total_pages && data.page && data.total_pages > data.page) {
+            this.isNextPage = true;
+            this.currentPage = data.page;
+            this.totalPages = data.total_pages;
+          } else {
+            this.isNextPage = false;
+          }
+        }),
         map((response: ApiResponse) => {
           return response.results;
         }),
@@ -42,13 +56,20 @@ export class MovieApiService {
 
     return this.page$.pipe(
       tap(value => console.log('subject value: ', value)),
+      tap(() => {
+        this.isNextPage = false;
+      }),
       switchMap(() => {
         return movies$;
       })
     );
   }
 
-  public getNextPage(): void {}
+  public getNextPage(): void {
+    if (this.totalPages > this.currentPage) {
+      this.page$.next(++this.currentPage);
+    }
+  }
 
   /**
    * Function that creates full image url and assign it to the passed array of objects

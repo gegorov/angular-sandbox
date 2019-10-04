@@ -7,8 +7,6 @@ import { MovieWithCast } from '../../core/models';
   styleUrls: ['./results.component.scss']
 })
 export class ResultsComponent {
-  constructor() {}
-
   /**
    * This is used to receive value from parent component and render in template
    */

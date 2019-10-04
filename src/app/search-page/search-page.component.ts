@@ -10,9 +10,9 @@ import { Observable } from 'rxjs';
 })
 export class SearchPageComponent {
   /**
-   * Private property for dependency injection
+   * public property for dependency injection
    */
-  private movieApiService: MovieApiService;
+  public movieApiService: MovieApiService;
 
   /**
    * Title of the application
@@ -50,6 +50,10 @@ export class SearchPageComponent {
   public onNotify(value: string): void {
     this.value = value;
     this.searchMovie(value);
+  }
+
+  public loadMore(): void {
+    this.movieApiService.getNextPage();
   }
   /**
    * Function that triggers fetch from movieApiService and also handles loading indicator state
