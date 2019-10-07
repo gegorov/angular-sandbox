@@ -1,58 +1,41 @@
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpEventType,
-  HttpHeaders,
-  HttpResponse,
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { tap, debounceTime } from 'rxjs/operators';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { tap, debounceTime, mergeMap } from 'rxjs/operators';
 
 export class ApiInterceptor implements HttpInterceptor {
   private apiDebnounceTime: number = 0;
+  private resetTime: number;
 
+  private counter: number = 0;
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(req).pipe(
-      tap((event: HttpEvent<any>) => {
-        // if (event.type === HttpEventType.ResponseHeader) {
-        //   console.log('Headers', event);
-        // }
-        // if (event.type === HttpEventType.Response) {
-        //   console.log('INTERCEPTOR RESPONSE EVENT', event);
-        // }
-        // const { headers } = event;
-
-        // if (headers) {
-        //   console.log('headers:', headers);
-        //   // headers.foreach(header => {
-        //   //   console.log('Header: ', header);
-        //   // });
-        // }
-
-        if (event instanceof HttpResponse && event.headers) {
-          const resetTime: string = event.headers.get('x-ratelimit-reset');
-          const rateLimit: string = event.headers.get('x-ratelimit-remaining');
-          console.log(`rate limit:  ${rateLimit}, resettime: ${resetTime}`);
-
-          if (rateLimit === '1') {
-            console.log('BEFORE: this debounce time:', this.apiDebnounceTime);
-            console.log('Date of reset: ', new Date(parseInt(resetTime, 10)));
-
-            this.apiDebnounceTime = new Date().getTime() - parseInt(resetTime, 10);
-            console.log('AFTER: this debounce time:', this.apiDebnounceTime);
-            console.log('Date: ', new Date(this.apiDebnounceTime));
-          }
+    return of(req).pipe(
+      tap((event: HttpRequest<any>) => {
+        console.log(`this reset time:  ${this.resetTime}, this.counter: ${this.counter}`);
+        if (event instanceof HttpRequest) {
+          this.counter++;
+        }
+        if (this.counter === 40 && this.resetTime) {
+          this.apiDebnounceTime = Number(this.resetTime) * 1000 - Date.now();
+          console.log('API DEBOUNCE TIME: ', this.apiDebnounceTime);
+          this.counter = 0;
         }
       }),
       tap(() => {
-        console.log('this debounce time:', this.apiDebnounceTime);
+        console.log('before debounceTime: ', this.apiDebnounceTime);
       }),
       debounceTime(this.apiDebnounceTime),
-      tap(() => {
-        this.apiDebnounceTime = 0;
-      })
+      mergeMap(() =>
+        next.handle(req).pipe(
+          tap(() => {
+            console.log(`apiDebouncetime ${this.apiDebnounceTime}, counter: ${this.counter}`);
+          }),
+          tap((event: HttpEvent<any>) => {
+            if (event instanceof HttpResponse && event.headers) {
+              this.resetTime = Number(event.headers.get('x-ratelimit-reset') as string);
+            }
+          })
+        )
+      )
     );
   }
 }
