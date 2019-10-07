@@ -34,12 +34,20 @@ export class ApiInterceptor implements HttpInterceptor {
         if (event instanceof HttpResponse && event.headers) {
           const resetTime: string = event.headers.get('x-ratelimit-reset');
           const rateLimit: string = event.headers.get('x-ratelimit-remaining');
-          console.log('rate limit: ', rateLimit);
-          console.log('reset time: ', resetTime);
+          console.log(`rate limit:  ${rateLimit}, resettime: ${resetTime}`);
+
           if (rateLimit === '1') {
-            this.apiDebnounceTime = +resetTime - Date.now();
+            console.log('BEFORE: this debounce time:', this.apiDebnounceTime);
+            console.log('Date of reset: ', new Date(parseInt(resetTime, 10)));
+
+            this.apiDebnounceTime = new Date().getTime() - parseInt(resetTime, 10);
+            console.log('AFTER: this debounce time:', this.apiDebnounceTime);
+            console.log('Date: ', new Date(this.apiDebnounceTime));
           }
         }
+      }),
+      tap(() => {
+        console.log('this debounce time:', this.apiDebnounceTime);
       }),
       debounceTime(this.apiDebnounceTime),
       tap(() => {
