@@ -1,6 +1,6 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { tap, debounceTime, mergeMap } from 'rxjs/operators';
+import { tap, mergeMap, delay } from 'rxjs/operators';
 
 export class ApiInterceptor implements HttpInterceptor {
   private apiDebnounceTime: number = 0;
@@ -14,7 +14,7 @@ export class ApiInterceptor implements HttpInterceptor {
         if (event instanceof HttpRequest) {
           this.counter++;
         }
-        if (this.counter === 40 && this.resetTime) {
+        if (this.counter === 21 && this.resetTime) {
           this.apiDebnounceTime = Number(this.resetTime) * 1000 - Date.now();
           console.log('API DEBOUNCE TIME: ', this.apiDebnounceTime);
           this.counter = 0;
@@ -23,7 +23,7 @@ export class ApiInterceptor implements HttpInterceptor {
       tap(() => {
         console.log('before debounceTime: ', this.apiDebnounceTime);
       }),
-      debounceTime(this.apiDebnounceTime),
+      delay(this.apiDebnounceTime),
       mergeMap(() =>
         next.handle(req).pipe(
           tap(() => {
