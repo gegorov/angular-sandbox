@@ -6,6 +6,6 @@ import { MovieApiService } from './movie-api.service';
 @NgModule({
   declarations: [],
   imports: [CommonModule, HttpClientModule],
-  providers: [MovieApiService]
+  providers: [MovieApiService],
 })
 export class ServiceModule {}

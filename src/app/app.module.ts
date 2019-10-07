@@ -13,6 +13,6 @@ import { AppComponent } from './app.component';
   declarations: [AppComponent],
   imports: [BrowserAnimationsModule, BrowserModule, CoreModule, MaterialModule, SearchPageModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

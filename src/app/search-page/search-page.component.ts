@@ -51,6 +51,7 @@ export class SearchPageComponent implements OnInit {
    * @param {string} value - data from input
    */
   public onNotify(value: string): void {
+    this.movieApiService.showLoader();
     this.value = value;
     this.searchMovie(value);
   }
@@ -59,6 +60,7 @@ export class SearchPageComponent implements OnInit {
    * function to load more data from the server
    */
   public loadMore(): void {
+    this.movieApiService.showLoader();
     this.movieApiService.getNextPage();
   }
   /**

@@ -8,10 +8,10 @@ import { ResultsComponent } from './results/results.component';
 import { MovieCardComponent } from './movie-card/movie-card.component';
 import { SearchPageComponent } from './search-page.component';
 import { MaterialModule } from '../material/material.module';
-
+import { LoaderComponent } from '../loader/loader.component';
 @NgModule({
-  declarations: [InputComponent, MovieCardComponent, SearchPageComponent, ResultsComponent],
+  declarations: [InputComponent, LoaderComponent, MovieCardComponent, SearchPageComponent, ResultsComponent],
   imports: [CommonModule, FormsModule, MaterialModule, ReactiveFormsModule],
-  exports: [SearchPageComponent]
+  exports: [SearchPageComponent],
 })
 export class SearchPageModule {}

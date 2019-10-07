@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, zip, BehaviorSubject } from 'rxjs';
-import { map, switchMap, tap, pluck, catchError, filter, scan } from 'rxjs/operators';
+import { map, switchMap, tap, pluck, catchError, filter, scan, debounceTime } from 'rxjs/operators';
 
 import C from '../constants';
 import { transformMovieData, transformCastData } from '../utils/index';
@@ -28,7 +28,9 @@ export class MovieApiService {
   /**
    * variable to store time of first fetch
    */
-  private fetchTimeMiliseconds: Date;
+  private fetchTimeMiliseconds: number;
+
+  private referenceTime: number = new Date(0).getTime();
 
   /**
    * interval for debouncing
@@ -52,6 +54,20 @@ export class MovieApiService {
    */
   public isNextPage = false;
 
+  public loader: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  //public loaderState: Observable<LoaderState> = this.loaderSubject.asObservable();
+
+  public showLoader(): void {
+    console.log('Show: true');
+    this.loader.next(true);
+  }
+
+  public hideLoader(): void {
+    console.log('Show: false');
+    this.loader.next(false);
+  }
+
   constructor(http: HttpClient) {
     this.http = http;
   }
@@ -70,9 +86,6 @@ export class MovieApiService {
           .append('page', `${page}`),
       })
       .pipe(
-        tap(() => {
-          this.fetchTimeMiliseconds = new Date();
-        }),
         tap((data: ApiResponse) => {
           if (data.total_pages && data.page && data.total_pages > data.page) {
             this.isNextPage = true;
@@ -98,15 +111,36 @@ export class MovieApiService {
   public getMoviesStream(): Observable<Array<MovieWithCast>> {
     return this.query$.pipe(
       filter((query: string) => !!query),
-
+      tap(() => {
+        this.fetchTimeMiliseconds = new Date().getTime();
+      }),
       switchMap((query: string) => {
         this.page$ = new BehaviorSubject(this.pageInitialValue);
         return this.page$.pipe(
           switchMap((pageNumber: number) => this.getData(query, pageNumber)),
-          scan((acc, resp) => [...acc, ...resp], [] as Array<MovieWithCast>)
+          scan((acc, resp) => [...acc, ...resp], [] as Array<MovieWithCast>),
+          tap(() => {
+            this.hideLoader();
+          })
         );
       })
     );
+  }
+
+  private calculateDebounceTime(): number {
+    console.log('this.referenceTime: ', this.referenceTime);
+    console.log('this.fetchTime: ', this.fetchTimeMiliseconds);
+    if (this.debounceInterval + this.referenceTime < this.fetchTimeMiliseconds) {
+      console.log('no debounce');
+      return 0;
+    } else {
+      const difference: number = this.fetchTimeMiliseconds - this.referenceTime;
+      console.log('difference: ', difference);
+      const timer = this.debounceInterval - difference;
+      console.log('timer: ', timer);
+
+      return timer;
+    }
   }
 
   /**
@@ -114,15 +148,7 @@ export class MovieApiService {
    */
   public getNextPage(): void {
     if (this.totalPages > this.currentPage) {
-      const difference = Date.now() - this.fetchTimeMiliseconds.getTime();
-      console.log('diff: ', difference);
-
-      const delay = difference > this.debounceInterval ? 0 : this.debounceInterval - difference + 1;
-      console.log('delay: ', delay);
-
-      setTimeout(() => {
-        this.page$.next(++this.currentPage);
-      }, delay);
+      this.page$.next(++this.currentPage);
     }
   }
 
@@ -170,6 +196,10 @@ export class MovieApiService {
         params: new HttpParams().append('api_key', C.API_KEY),
       })
       .pipe(
+        debounceTime(this.calculateDebounceTime()),
+        tap(() => {
+          this.referenceTime = Date.now();
+        }),
         pluck(keyToPluck),
         map((cast: Array<RawCast>) => cast.map(transformCastData)),
         map(data => this.fieldMapper(data, 'profilePath'))
@@ -185,12 +215,16 @@ export class MovieApiService {
       const movieStreams$: Array<Observable<MovieWithCast>> = data.map((movie: Movie) =>
         this.getMovieCast(movie.id).pipe(
           map((cast: Array<Cast>) => ({ ...movie, cast })),
-          catchError(() => of(movie as MovieWithCast))
+          catchError(() => {
+            this.hideLoader();
+            return of(movie as MovieWithCast);
+          })
         )
       );
 
       return zip(...movieStreams$);
     } else {
+      this.hideLoader();
       return of([]);
     }
   };

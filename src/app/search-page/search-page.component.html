@@ -11,11 +11,11 @@
 
   <ng-template #results>
     <app-results [searchResult]="movies$ | async" class="search-results"></app-results>
-
-    <div *ngIf="movieApiService.isNextPage" class="load-more-wrapper">
-      <button mat-raised-button color="primary" type="button" (click)="loadMore()">
-        Load More
-      </button>
-    </div>
   </ng-template>
+  <div *ngIf="movieApiService.isNextPage" class="load-more-wrapper">
+    <button mat-raised-button color="primary" type="button" (click)="loadMore()">
+      Load More
+    </button>
+  </div>
+  <app-loader></app-loader>
 </div>
