@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, zip, BehaviorSubject } from 'rxjs';
-import { map, switchMap, tap, pluck, catchError, filter, scan, debounceTime } from 'rxjs/operators';
+import { map, switchMap, tap, pluck, catchError, filter, scan } from 'rxjs/operators';
 
 import C from '../constants';
 import { transformMovieData, transformCastData } from '../utils/index';
@@ -25,17 +25,6 @@ export class MovieApiService {
    */
   private page$: BehaviorSubject<number>;
 
-  /**
-   * variable to store time of first fetch
-   */
-  private fetchTimeMiliseconds: number;
-
-  private referenceTime: number = new Date(0).getTime();
-
-  /**
-   * interval for debouncing
-   */
-  private debounceInterval: number = 10000;
   /**
    * current page indicator
    */
@@ -111,9 +100,6 @@ export class MovieApiService {
   public getMoviesStream(): Observable<Array<MovieWithCast>> {
     return this.query$.pipe(
       filter((query: string) => !!query),
-      tap(() => {
-        this.fetchTimeMiliseconds = new Date().getTime();
-      }),
       switchMap((query: string) => {
         this.page$ = new BehaviorSubject(this.pageInitialValue);
         return this.page$.pipe(
@@ -125,22 +111,6 @@ export class MovieApiService {
         );
       })
     );
-  }
-
-  private calculateDebounceTime(): number {
-    console.log('this.referenceTime: ', this.referenceTime);
-    console.log('this.fetchTime: ', this.fetchTimeMiliseconds);
-    if (this.debounceInterval + this.referenceTime < this.fetchTimeMiliseconds) {
-      console.log('no debounce');
-      return 0;
-    } else {
-      const difference: number = this.fetchTimeMiliseconds - this.referenceTime;
-      console.log('difference: ', difference);
-      const timer = this.debounceInterval - difference;
-      console.log('timer: ', timer);
-
-      return timer;
-    }
   }
 
   /**
@@ -196,10 +166,6 @@ export class MovieApiService {
         params: new HttpParams().append('api_key', C.API_KEY),
       })
       .pipe(
-        debounceTime(this.calculateDebounceTime()),
-        tap(() => {
-          this.referenceTime = Date.now();
-        }),
         pluck(keyToPluck),
         map((cast: Array<RawCast>) => cast.map(transformCastData)),
         map(data => this.fieldMapper(data, 'profilePath'))
