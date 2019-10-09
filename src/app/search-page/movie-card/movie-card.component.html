@@ -1,32 +1,32 @@
 <mat-card class="example-card">
-  <mat-card-header>
-    <mat-card-title>
-      {{ movie.title }}
-    </mat-card-title>
-    <mat-card-subtitle>Release date: {{ movie.releaseDate }}</mat-card-subtitle>
-  </mat-card-header>
+    <mat-card-header>
+        <mat-card-title>
+            {{ movie.title }}
+        </mat-card-title>
+        <mat-card-subtitle>Release date: {{ movie.releaseDate }}</mat-card-subtitle>
+    </mat-card-header>
 
-  <mat-card-content>
-    <div class="movie-poster__wrapper">
-      <img src="{{ movie.posterPath }}" alt="{{ movie.title }}" width="185" class="movie-poster" />
-    </div>
-    <div class="movie-details">
-      <p class="movie-overview">
-        {{ movie.overview }}
-      </p>
-      <div class="movie-cast">
-        <div class="movie-cast__card" *ngFor="let actor of movie?.cast?.slice(0, 5)">
-          <img src="{{ actor.profilePath }}" alt="{{ actor.name }}" width="45" class="movie-cast__profile" />
-          <div class="movie-cast__actor-name">
-            <span class="movie-cast__actor">
-              <strong>
-                {{ actor.name }}
-              </strong>
-            </span>
-            <span> as {{ actor.character }} </span>
-          </div>
+    <mat-card-content>
+        <div class="movie-poster__wrapper">
+            <img src="{{ movie.posterPath }}" alt="{{ movie.title }}" width="185" class="movie-poster" />
         </div>
-      </div>
-    </div>
-  </mat-card-content>
+        <div class="movie-details">
+            <p class="movie-overview">
+                {{ movie.overview }}
+            </p>
+            <div class="movie-cast">
+                <div class="movie-cast__card" *ngFor="let actor of movie?.cast?.slice(0, 5)">
+                    <img src="{{ actor.profilePath }}" alt="{{ actor.name }}" width="45" class="movie-cast__profile" />
+                    <div class="movie-cast__actor-name">
+                        <span class="movie-cast__actor">
+                            <strong>
+                                {{ actor.name }}
+                            </strong>
+                        </span>
+                        <span> as {{ actor.character }} </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
 </mat-card>

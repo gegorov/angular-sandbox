@@ -1,20 +1,20 @@
 .search-form {
-  min-width: 500px;
-  max-width: 900px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+    min-width: 500px;
+    max-width: 900px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .search-form--input {
-  width: 100%;
+    width: 100%;
 }
 
 .search-form--button-wrapper {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
-  align-items: center;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    align-items: center;
 }

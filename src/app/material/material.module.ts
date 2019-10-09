@@ -9,16 +9,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-  ],
-  exports: [MatButtonModule, MatIconModule, MatCardModule, MatSidenavModule, MatInputModule, MatProgressSpinnerModule],
+    declarations: [],
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatInputModule,
+        MatProgressSpinnerModule
+    ],
+    exports: [MatButtonModule, MatIconModule, MatCardModule, MatSidenavModule, MatInputModule, MatProgressSpinnerModule]
 })
 export class MaterialModule {}

@@ -10,9 +10,9 @@ import { SearchPageModule } from './search-page/search-page.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserAnimationsModule, BrowserModule, CoreModule, MaterialModule, SearchPageModule],
-  providers: [],
-  bootstrap: [AppComponent],
+    declarations: [AppComponent],
+    imports: [BrowserAnimationsModule, BrowserModule, CoreModule, MaterialModule, SearchPageModule],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}

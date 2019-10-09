@@ -5,14 +5,14 @@ import { MovieApiService } from './movie-api.service';
 import { ApiInterceptor } from './api.interceptor';
 
 const INTERCEPTOR_PROVIDER: Provider = {
-  provide: HTTP_INTERCEPTORS,
-  useClass: ApiInterceptor,
-  multi: true,
+    provide: HTTP_INTERCEPTORS,
+    useClass: ApiInterceptor,
+    multi: true
 };
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule, HttpClientModule],
-  providers: [INTERCEPTOR_PROVIDER, MovieApiService],
+    declarations: [],
+    imports: [CommonModule, HttpClientModule],
+    providers: [INTERCEPTOR_PROVIDER, MovieApiService]
 })
 export class ServiceModule {}

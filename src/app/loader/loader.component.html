@@ -1,3 +1,4 @@
-<div class="loader" *ngIf="api.loader | async">
-  <mat-progress-spinner [color]="color" [mode]="mode" [value]="value"> </mat-progress-spinner>
+<div class="loader" *ngIf="loader$ | async">
+    <mat-progress-spinner [color]="loaderConfig.color" [mode]="loaderConfig.mode" [value]="loaderConfig.value">
+    </mat-progress-spinner>
 </div>
