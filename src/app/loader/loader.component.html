@@ -1,0 +1,4 @@
+<div class="loader" *ngIf="loader$ | async">
+    <mat-progress-spinner [color]="loaderConfig.color" [mode]="loaderConfig.mode" [value]="loaderConfig.value">
+    </mat-progress-spinner>
+</div>

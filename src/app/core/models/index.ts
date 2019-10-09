@@ -4,4 +4,4 @@ import { ResponseMovie } from './response-movie.interface';
 import { Cast, Crew, MoviePersonnel, RawCast } from './movie-personnel.interface';
 import { MovieWithCast } from './movie-with-cast.interface';
 
-export { ApiResponse, Movie, ResponseMovie, Cast, Crew, MoviePersonnel, MovieWithCast, RawCast };
+export { ApiResponse, Cast, Crew, Movie, MoviePersonnel, MovieWithCast, RawCast, ResponseMovie };
