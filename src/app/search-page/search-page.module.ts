@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputComponent } from './input/index';
 import { ResultsComponent } from './results/index';
 import { MovieCardComponent } from './movie-card/index';
-import { SearchPageComponent } from './index';
+import { SearchPageComponent } from './search-page.component';
 import { SharedModule } from '../shared/index';
 @NgModule({
     declarations: [InputComponent, MovieCardComponent, SearchPageComponent, ResultsComponent],
