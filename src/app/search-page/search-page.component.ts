@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MovieApiService } from '../core/index';
-import { MovieWithCast } from '../core/models';
+import { MovieApiService, MovieWithCast } from '../core/index';
 import { Observable } from 'rxjs';
 
 @Component({

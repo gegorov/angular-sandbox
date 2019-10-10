@@ -3,15 +3,16 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { NgModule } from '@angular/core';
 
-import { CoreModule } from './core/core.module';
-import { MaterialModule } from './material/material.module';
-import { SearchPageModule } from './search-page/search-page.module';
+import { CoreModule } from './core/index';
+import { SearchPageModule } from './search-page/index';
+import { SharedModule } from './shared/index';
+import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-
+import { FilmsToWatchComponent } from './films-to-watch/index';
 @NgModule({
-    declarations: [AppComponent],
-    imports: [BrowserAnimationsModule, BrowserModule, CoreModule, MaterialModule, SearchPageModule],
+    declarations: [AppComponent, FilmsToWatchComponent],
+    imports: [BrowserAnimationsModule, BrowserModule, AppRoutingModule, CoreModule, SearchPageModule, SharedModule],
     providers: [],
     bootstrap: [AppComponent]
 })

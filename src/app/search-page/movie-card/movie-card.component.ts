@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { MovieWithCast } from '../../core/models';
+import { MovieWithCast } from '../../core/index';
 
 @Component({
     selector: 'app-movie-card',

@@ -3,15 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { InputComponent } from './input/input.component';
-import { ResultsComponent } from './results/results.component';
-import { MovieCardComponent } from './movie-card/movie-card.component';
+import { InputComponent } from './input/index';
+import { ResultsComponent } from './results/index';
+import { MovieCardComponent } from './movie-card/index';
 import { SearchPageComponent } from './search-page.component';
-import { MaterialModule } from '../material/material.module';
-import { LoaderComponent } from '../loader/loader.component';
+import { SharedModule } from '../shared/index';
 @NgModule({
-    declarations: [InputComponent, LoaderComponent, MovieCardComponent, SearchPageComponent, ResultsComponent],
-    imports: [CommonModule, FormsModule, MaterialModule, ReactiveFormsModule],
+    declarations: [InputComponent, MovieCardComponent, SearchPageComponent, ResultsComponent],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, SharedModule],
     exports: [SearchPageComponent]
 })
 export class SearchPageModule {}

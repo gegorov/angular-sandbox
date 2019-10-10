@@ -1,4 +1,4 @@
-import { ResponseMovie, Movie, Cast, RawCast } from '../models';
+import { ResponseMovie, Movie, Cast, RawCast } from '../index';
 
 /**
  * function that generates random alpha char to be used as a query parameter in lucy search
