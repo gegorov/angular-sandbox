@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MovieApiService } from '../../core';
+import { MovieApiService } from '../../core/index';
 import { BehaviorSubject } from 'rxjs';
 
 interface LoaderConfig {
