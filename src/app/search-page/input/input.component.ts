@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
-import { generateRandomChar } from '../../core/utils/index';
+import { generateRandomChar } from '../../core/index';
 
 @Component({
     selector: 'app-input',

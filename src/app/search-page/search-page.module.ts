@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { InputComponent } from './input/input.component';
-import { ResultsComponent } from './results/results.component';
-import { MovieCardComponent } from './movie-card/movie-card.component';
-import { SearchPageComponent } from './search-page.component';
-import { SharedModule } from '../shared/shared.module';
+import { InputComponent } from './input/index';
+import { ResultsComponent } from './results/index';
+import { MovieCardComponent } from './movie-card/index';
+import { SearchPageComponent } from './index';
+import { SharedModule } from '../shared/index';
 @NgModule({
     declarations: [InputComponent, MovieCardComponent, SearchPageComponent, ResultsComponent],
     imports: [CommonModule, FormsModule, ReactiveFormsModule, SharedModule],

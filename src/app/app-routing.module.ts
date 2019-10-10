@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SearchPageComponent } from './search-page/search-page.component';
-import { FilmsToWatchComponent } from './films-to-watch/films-to-watch.component';
+import { SearchPageComponent } from './search-page/index';
+import { FilmsToWatchComponent } from './films-to-watch/index';
 
 const routes: Routes = [
     { path: '', component: SearchPageComponent },
