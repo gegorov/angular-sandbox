@@ -1,5 +1,5 @@
 <div class="container">
     <p>film-page works!</p>
 
-    <div *ngFor="let movie of movies">{{ movie.id }} - {{ movie.title }}</div>
+    <div *ngFor="let movie of movies$ | async">{{ movie.id }} - {{ movie.title }}</div>
 </div>

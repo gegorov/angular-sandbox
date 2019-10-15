@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { MovieWithCast } from '../../core/index';
 import { Store } from '@ngrx/store';
-import { State } from 'src/app/core/store';
-import { AddFilm, RemoveFilm } from 'src/app/core/store/actions/films-to-watch.actions';
+import { AppState } from '../../core/store/index';
+import { addFilm, removeFilm } from 'src/app/core/store/actions/films-to-watch.actions';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
@@ -17,13 +17,13 @@ export class MovieCardComponent {
      */
     @Input() public movie: MovieWithCast;
 
-    constructor(private store: Store<State>) {}
+    constructor(private store: Store<AppState>) {}
 
     public onChange(event: MatCheckboxChange): void {
         if (event.checked) {
-            this.store.dispatch(new AddFilm(this.movie));
+            this.store.dispatch(addFilm({ film: this.movie }));
         } else {
-            this.store.dispatch(new RemoveFilm(this.movie));
+            this.store.dispatch(removeFilm({ film: this.movie }));
         }
     }
 }

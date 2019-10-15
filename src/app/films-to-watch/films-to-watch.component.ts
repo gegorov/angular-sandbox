@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { State, selectFilmsToWatchList } from '../core/store/index';
-import { MovieWithCast } from '../core';
+import { AppState, selectFilmsToWatchList } from '../core/store/index';
+import { MovieWithCast } from '../core/index';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -9,9 +10,15 @@ import { tap } from 'rxjs/operators';
     templateUrl: './films-to-watch.component.html',
     styleUrls: ['./films-to-watch.component.scss']
 })
-export class FilmsToWatchComponent {
-    public movies: Array<MovieWithCast>;
-    constructor(private store: Store<State>) {
-        store.pipe(select(selectFilmsToWatchList)).subscribe(filmsToWatch => (this.movies = filmsToWatch));
+export class FilmsToWatchComponent implements OnInit {
+    public movies$: Observable<Array<MovieWithCast>>;
+
+    constructor(private store: Store<AppState>) {}
+
+    ngOnInit(): void {
+        this.movies$ = this.store.pipe(
+            select(selectFilmsToWatchList),
+            tap(data => console.log('data: ', data))
+        );
     }
 }

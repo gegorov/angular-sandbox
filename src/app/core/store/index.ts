@@ -1,5 +1,5 @@
 export {
-    State,
+    AppState,
     reducers,
     metaReducers,
     stateFeatureKey,

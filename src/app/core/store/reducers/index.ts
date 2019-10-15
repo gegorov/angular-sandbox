@@ -4,18 +4,18 @@ import { filmsToWatchReducer, FilmsToWatchState } from './films-to-watch.reducer
 
 export const stateFeatureKey: string = 'state';
 
-export interface State {
+export interface AppState {
     filmsToWatch: FilmsToWatchState;
 }
 
-export const reducers: ActionReducerMap<State> = {
+export const reducers: ActionReducerMap<AppState> = {
     filmsToWatch: filmsToWatchReducer
 };
 
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];
+export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];
 
-export const selectFilmsToWatchState = (state: State) => state.filmsToWatch;
+export const selectFilmsToWatchState = (state: AppState) => state.filmsToWatch;
 export const selectFilmsToWatchList = createSelector(
     selectFilmsToWatchState,
-    (state: FilmsToWatchState) => state.filmsToWatch
+    (state: FilmsToWatchState) => state
 );
