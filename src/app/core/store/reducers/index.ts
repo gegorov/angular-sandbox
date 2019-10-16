@@ -1,4 +1,4 @@
-import { ActionReducerMap, MetaReducer, createSelector } from '@ngrx/store';
+import { ActionReducerMap, MetaReducer } from '@ngrx/store';
 import { environment } from '../../../../environments/environment';
 import { filmsToWatchReducer, FilmsToWatchState } from './films-to-watch.reducers';
 
@@ -14,8 +14,4 @@ export const reducers: ActionReducerMap<AppState> = {
 
 export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [] : [];
 
-export const selectFilmsToWatchState = (state: AppState) => state.filmsToWatch;
-export const selectFilmsToWatchList = createSelector(
-    selectFilmsToWatchState,
-    (state: FilmsToWatchState) => state
-);
+export { FilmsToWatchState } from './films-to-watch.reducers';

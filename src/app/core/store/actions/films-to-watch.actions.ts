@@ -1,32 +1,26 @@
-import { createAction, props } from '@ngrx/store';
-import { MovieWithCast } from '../../models';
+import { createAction, props, ActionCreator } from '@ngrx/store';
+import { TypedAction } from '@ngrx/store/src/models';
+import { MovieWithCast } from '../../models/index';
 
 enum FilmsToWatchActionTypes {
     AddFilm = '[FilmsToWatch] Add Film',
     RemoveFilm = '[FilmsToWatch] Remove Film'
 }
 
-// export class AddFilm implements Action {
-//     public payload: MovieWithCast;
-//     readonly type: string = FilmsToWatchActionTypes.AddFilm;
+type FilmsToWatchActionFunction = ActionCreator<
+    FilmsToWatchActionTypes,
+    (props: {
+        film: MovieWithCast;
+    }) => {
+        film: MovieWithCast;
+    } & TypedAction<FilmsToWatchActionTypes>
+>;
 
-//     constructor(payload: MovieWithCast) {
-//         this.payload = payload;
-//         console.log('Action fired: ', FilmsToWatchActionTypes.AddFilm, this.payload);
-//     }
-// }
-
-export const addFilm = createAction(FilmsToWatchActionTypes.AddFilm, props<{ film: MovieWithCast }>());
-export const removeFilm = createAction(FilmsToWatchActionTypes.RemoveFilm, props<{ film: MovieWithCast }>());
-
-// export class RemoveFilm implements Action {
-//     public payload: MovieWithCast;
-//     readonly type: string = FilmsToWatchActionTypes.RemoveFilm;
-
-//     constructor(payload: MovieWithCast) {
-//         this.payload = payload;
-//         console.log('Action fired: ', FilmsToWatchActionTypes.RemoveFilm, this.payload);
-//     }
-// }
-
-// export type FilmsToWatchActions = AddFilm | RemoveFilm;
+export const addFilm: FilmsToWatchActionFunction = createAction(
+    FilmsToWatchActionTypes.AddFilm,
+    props<{ film: MovieWithCast }>()
+);
+export const removeFilm: FilmsToWatchActionFunction = createAction(
+    FilmsToWatchActionTypes.RemoveFilm,
+    props<{ film: MovieWithCast }>()
+);

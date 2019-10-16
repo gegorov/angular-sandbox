@@ -1,5 +1,15 @@
 <div class="container">
-    <p>film-page works!</p>
-
-    <div *ngFor="let movie of movies$ | async">{{ movie.id }} - {{ movie.title }}</div>
+    <h3>Films saved to watch later</h3>
+    <mat-list #list>
+        <mat-list-item *ngFor="let movie of movies$ | async">
+            <div class="list-item">
+                <h4 mat-line>
+                    {{ movie.title }}
+                    <button mat-icon-button aria-label="Example icon-button with a heart icon" (click)="onClick(movie)">
+                        <mat-icon mat-list-icon>delete</mat-icon>
+                    </button>
+                </h4>
+            </div>
+        </mat-list-item>
+    </mat-list>
 </div>
