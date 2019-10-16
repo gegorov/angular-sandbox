@@ -10,22 +10,10 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { FilmsToWatchComponent } from './films-to-watch/index';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
 
 @NgModule({
     declarations: [AppComponent, FilmsToWatchComponent],
-    imports: [
-        BrowserAnimationsModule,
-        BrowserModule,
-        AppRoutingModule,
-        CoreModule,
-        SearchPageModule,
-        SharedModule,
-        StoreModule.forRoot({}),
-        !environment.production ? StoreDevtoolsModule.instrument() : []
-    ],
+    imports: [BrowserAnimationsModule, BrowserModule, AppRoutingModule, CoreModule, SearchPageModule, SharedModule],
     providers: [],
     bootstrap: [AppComponent]
 })
