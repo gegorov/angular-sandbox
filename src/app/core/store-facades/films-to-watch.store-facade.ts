@@ -8,6 +8,9 @@ import { MovieWithCast } from '../models/index';
 export class FilmsToWatchStoreFacade {
     private store: Store<AppState>;
 
+    /**
+     * Observable that contain result of selectFilmsToWatchList selector
+     */
     public filmsToWatch$: Observable<Array<MovieWithCast>>;
 
     constructor(store: Store<AppState>) {
