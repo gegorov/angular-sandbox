@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { FilmsToWatchComponent } from './films-to-watch/index';
+
 @NgModule({
     declarations: [AppComponent, FilmsToWatchComponent],
     imports: [BrowserAnimationsModule, BrowserModule, AppRoutingModule, CoreModule, SearchPageModule, SharedModule],
