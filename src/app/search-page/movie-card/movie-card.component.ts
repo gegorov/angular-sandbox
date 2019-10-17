@@ -1,7 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
 
-import { MovieWithCast, AppState, FilmsToWatchActions } from '../../core/index';
+import { MovieWithCast, FilmsToWatchStoreFacade } from '../../core/index';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
@@ -16,7 +15,10 @@ export class MovieCardComponent {
      */
     @Input() public movie: MovieWithCast;
 
-    constructor(private store: Store<AppState>) {}
+    private filmsToWatchStoreFacade: FilmsToWatchStoreFacade;
+    constructor(filmsToWatchStoreFacade: FilmsToWatchStoreFacade) {
+        this.filmsToWatchStoreFacade = filmsToWatchStoreFacade;
+    }
 
     /**
      * Function that fires eiter add or remove film action
@@ -24,9 +26,9 @@ export class MovieCardComponent {
      */
     public onChange(event: MatCheckboxChange): void {
         if (event.checked) {
-            this.store.dispatch(FilmsToWatchActions.addFilm({ film: this.movie }));
+            this.filmsToWatchStoreFacade.addFilmToList(this.movie);
         } else {
-            this.store.dispatch(FilmsToWatchActions.removeFilm({ film: this.movie }));
+            this.filmsToWatchStoreFacade.removeFilmFromList(this.movie);
         }
     }
 }

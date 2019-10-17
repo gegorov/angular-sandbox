@@ -1,23 +1,23 @@
 import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { AppState, MovieWithCast, selectFilmsToWatchList, FilmsToWatchActions } from '../core/index';
+import { Component } from '@angular/core';
+import { MovieWithCast, FilmsToWatchStoreFacade } from '../core/index';
 
 @Component({
     selector: 'app-films-to-watch',
     templateUrl: './films-to-watch.component.html',
     styleUrls: ['./films-to-watch.component.scss']
 })
-export class FilmsToWatchComponent implements OnInit {
-    private store: Store<AppState>;
+export class FilmsToWatchComponent {
+    private filmsToWatchStoreFacade: FilmsToWatchStoreFacade;
 
     /**
      * variable to store slice of the store and pass it to component
      */
     public movies$: Observable<Array<MovieWithCast>>;
 
-    constructor(store: Store<AppState>) {
-        this.store = store;
+    constructor(filmsToWatchStoreFacade: FilmsToWatchStoreFacade) {
+        this.filmsToWatchStoreFacade = filmsToWatchStoreFacade;
+        this.movies$ = filmsToWatchStoreFacade.filmsToWatch$;
     }
 
     /**
@@ -25,11 +25,6 @@ export class FilmsToWatchComponent implements OnInit {
      * @param {MovieWithCast} movie
      */
     public onClick(movie: MovieWithCast): void {
-        console.log('id: ', movie);
-        this.store.dispatch(FilmsToWatchActions.removeFilm({ film: movie }));
-    }
-
-    ngOnInit(): void {
-        this.movies$ = this.store.pipe(select(selectFilmsToWatchList));
+        this.filmsToWatchStoreFacade.removeFilmFromList(movie);
     }
 }

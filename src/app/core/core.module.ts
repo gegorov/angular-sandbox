@@ -5,6 +5,7 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../environments/environment';
 import * as fromState from './store/index';
+import { StoreFacadeModule } from './store-facades/store-facades.module';
 
 @NgModule({
     declarations: [],
@@ -12,7 +13,8 @@ import * as fromState from './store/index';
         CommonModule,
         ServiceModule,
         StoreModule.forRoot(fromState.reducers, { metaReducers: fromState.metaReducers }),
-        !environment.production ? StoreDevtoolsModule.instrument() : []
+        !environment.production ? StoreDevtoolsModule.instrument() : [],
+        StoreFacadeModule
     ]
 })
 export class CoreModule {}
