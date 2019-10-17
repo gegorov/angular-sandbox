@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FilmsToWatchStoreFacade } from './films-to-watch.store-facade';
 
 @NgModule({
-    imports: [CommonModule, FilmsToWatchStoreFacade],
+    imports: [CommonModule],
     providers: [FilmsToWatchStoreFacade]
 })
 export class StoreFacadeModule {}
