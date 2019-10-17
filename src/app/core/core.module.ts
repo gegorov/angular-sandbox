@@ -4,7 +4,7 @@ import { ServiceModule } from './services/service.module';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../../environments/environment';
-import * as fromState from './store';
+import * as fromState from './store/index';
 
 @NgModule({
     declarations: [],

@@ -14,12 +14,12 @@ interface LoaderConfig {
     styleUrls: ['./loader.component.scss']
 })
 export class LoaderComponent {
+    private movieApiService: MovieApiService;
+
     /**
      * Variable that is used to track status of the loader
      */
     public loader$: BehaviorSubject<boolean>;
-
-    private movieApiService: MovieApiService;
 
     /**
      * color, mode and value - are configuration parameters for Material Loader

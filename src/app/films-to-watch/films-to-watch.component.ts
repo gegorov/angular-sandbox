@@ -9,12 +9,12 @@ import { AppState, MovieWithCast, selectFilmsToWatchList, FilmsToWatchActions } 
     styleUrls: ['./films-to-watch.component.scss']
 })
 export class FilmsToWatchComponent implements OnInit {
+    private store: Store<AppState>;
+
     /**
      * variable to store slice of the store and pass it to component
      */
     public movies$: Observable<Array<MovieWithCast>>;
-
-    private store: Store<AppState>;
 
     constructor(store: Store<AppState>) {
         this.store = store;
@@ -24,7 +24,7 @@ export class FilmsToWatchComponent implements OnInit {
      * Function that triggers action to remove movie from store
      * @param {MovieWithCast} movie
      */
-    onClick(movie: MovieWithCast): void {
+    public onClick(movie: MovieWithCast): void {
         console.log('id: ', movie);
         this.store.dispatch(FilmsToWatchActions.removeFilm({ film: movie }));
     }

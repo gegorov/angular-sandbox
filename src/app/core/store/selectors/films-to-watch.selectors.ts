@@ -6,6 +6,7 @@ import { MovieWithCast } from '../../models/index';
 export const selectFilmsToWatchState: (state: AppState) => Array<MovieWithCast> = (
     state: AppState
 ): Array<MovieWithCast> => state.filmsToWatch;
+
 export const selectFilmsToWatchList: MemoizedSelector<
     AppState,
     Array<MovieWithCast>,
